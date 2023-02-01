@@ -13,6 +13,7 @@ public class Main {
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
 
+        //testing
         window.pack();
 
         window.setLocationRelativeTo(null);
