@@ -42,11 +42,14 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
+
     /**
      *
      * called by the Thread
+     * Sleep method
      */
     @Override
+   /*
     public void run() {
         // create the game loop (game core)
 
@@ -82,6 +85,49 @@ public class GamePanel extends JPanel implements Runnable{
 
             } catch (InterruptedException e){
                 e.printStackTrace();
+            }
+
+        }
+    }   */
+
+    public void run() {
+
+        double drawInterval = 1000000000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        // vars to count and show FPS
+        long timer = 0;
+        int drawCount = 0;
+
+
+        while(gameThread != null) {
+
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+
+            // it's important for the timer to be btwn currentTime and lastTime
+            timer += (currentTime - lastTime);
+            // above position is important to desplay the FPS
+
+            lastTime = currentTime;
+
+
+            if (delta >= 1) {
+                update();
+                repaint();
+
+                delta--;
+                drawCount++;
+            }
+
+            if (timer >= 1000000000) {
+                System.out.println("FPS: "+ drawCount);
+
+                // reset vars again
+                drawCount = 0;
+                timer = 0;
             }
 
         }
