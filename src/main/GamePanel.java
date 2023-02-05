@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -14,13 +15,15 @@ public class GamePanel extends JPanel implements Runnable{
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;  // 48 x 48 tile
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol;    // 768 pixels
-    final int screenHeight = tileSize * maxScreenRow;   //562 pixels
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12;
+    public final int screenWidth = tileSize * maxScreenCol;    // 768 pixels
+    public final int screenHeight = tileSize * maxScreenRow;   //562 pixels
 
     // FPS  (Frames per second)
     int FPS = 60;
+
+    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     // game clock (Thread)
     Thread gameThread;
@@ -28,9 +31,11 @@ public class GamePanel extends JPanel implements Runnable{
     Player player = new Player(this, keyH);
 
      // set players default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+//    int playerX = 100;
+//    int playerY = 100;
+//    int playerSpeed = 4;
+
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -146,6 +151,10 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
+
+        // ensure you draw the tile before the player (it's like a layer)
+        tileM.draw(g2);
+
         player.draw(g2);
         g2.dispose();
 
