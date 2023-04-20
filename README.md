@@ -1,5 +1,6 @@
 # MyFirst2DGame
 ## Structure
+```bash
 .
 ├── MyFirst2DGame.iml
 ├── README.md
@@ -39,6 +40,7 @@
     └── tile
         ├── Tile.java
         └── TileManager.java
+```
 
  ## In flight project but working continuous improvements
  
