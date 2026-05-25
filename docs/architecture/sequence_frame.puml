@@ -1,0 +1,24 @@
+@startuml sequence_frame
+title Sequence — single game frame
+
+skinparam shadowing false
+
+participant "Game thread\n(Runnable)" as thread
+participant "GamePanel" as panel
+participant "KeyHandler" as keys
+participant "Player" as player
+participant "CollisionChecker" as col
+participant "TileManager" as tm
+
+thread -> panel : update()
+panel -> player : update()
+player -> keys : read direction flags
+player -> col : checkTile(this)
+col -> tm : look up mapTileNum[col][row]
+col -> col : WorldGeometry.tileBoundsOf(...)
+col --> player : sets entity.collisionOn
+player -> player : if !collisionOn, advance worldX/Y by speed
+thread -> panel : repaint()
+panel -> tm : draw(g2)
+panel -> player : draw(g2)
+@enduml

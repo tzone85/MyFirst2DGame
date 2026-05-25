@@ -1,0 +1,54 @@
+@startuml component
+title MyFirst2DGame — Component Architecture
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor Player
+
+package "main" {
+  [Main\n(JFrame entry)] as mainc
+  [GamePanel\n(JPanel + game loop)] as panel
+  [CollisionChecker] as col
+  [KeyHandler\n(KeyListener)] as keys
+}
+package "entity" {
+  [Entity\n(world + sprite state)] as ent
+  [Player extends Entity] as player
+}
+package "tile" {
+  [TileManager\n(map loading + draw)] as tm
+  [Tile] as tileC
+}
+package "world (PURE - unit-tested)" {
+  [MapParser\n(text -> 2D array)] as parser
+  [WorldGeometry\n(tile bounds, edge math)] as geo
+}
+
+cloud "resources\n(maps + sprites)" as res
+
+Player --> keys : keystrokes
+mainc --> panel : adds to JFrame
+panel --> player : owns
+panel --> tm : owns
+panel --> col : checkTile(entity)
+panel --> keys : reads
+player --> ent : extends
+tm --> tileC : owns Tile array
+tm --> parser : parses res file
+col --> geo : tileBoundsOf, movedEdgeIndex
+parser --> res
+tm --> res
+player --> res : loads sprite PNGs
+
+note bottom of parser
+  Pure: throws IAE on shape errors.
+  Tested without instantiating a JPanel.
+end note
+
+note bottom of geo
+  Pure tile-math used by CollisionChecker.
+  Extracted from the original CollisionChecker
+  switch-on-direction.
+end note
+@enduml
